@@ -12,3 +12,4 @@ jobs:
     with:
       board_prefix: "knock-processor"
       board_suffix: "a"
+      token: ${{ secrets.GITHUB_TOKEN }}
