@@ -9,7 +9,3 @@ jobs:
     uses: andreika-git/hellen-one/.github/workflows/create-board.yaml@kicad8
     permissions:
       contents: write
-    with:
-      board_prefix: "knock-processor"
-      board_suffix: "a"
-      token: ${{ secrets.GITHUB_TOKEN }}
