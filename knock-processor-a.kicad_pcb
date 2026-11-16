@@ -1,10 +1,16 @@
-(kicad_pcb (version 20211123) (generator pcbnew)
+(kicad_pcb (version 20211014) (generator pcbnew)
   (generator_version "8.0")
-  (uuid 7d02aad608da4b10ba030cf02955fbe4)
+  (uuid b0615f75919a466390e4eb140e564748)
   (general
     (thickness 1.6)
   )
   (paper "A4")
+  (title_block
+    (title "Knock Processor Board")
+    (date "2026-11-16")
+    (rev "0.1")
+    (company "Standalone knock sensor preamp")
+  )
   (layers
     (0 "F.Cu" signal)
     (31 "B.Cu" signal)
@@ -30,6 +36,7 @@
   (setup
     (pad_to_mask_clearance 0.051)
     (allow_soldermask_bridges_in_footprints no)
+    (aux_axis_origin 0 0)
   )
   (net 1 "IN_KNOCK1")
   (net 2 "IN_KNOCK2")
@@ -48,6 +55,36 @@
     )
     (layer "Edge.Cuts")
     (width 0.15)
+  )
+  (zone (net 6) (net_name "GND") (layer "F.Cu")
+    (uuid eeb37153bfa149f79cac0596f8e7493a)
+    (hatch edge 0.508)
+    (priority 0)
+    (connect_pads (clearance 0.254))
+    (min_thickness 0.254)
+    (filled_polygon
+      (pts
+        (xy 0 0)
+        (xy 60 0)
+        (xy 60 40)
+        (xy 0 40)
+      )
+    )
+  )
+  (zone (net 5) (net_name "V5A") (layer "B.Cu")
+    (uuid ebfe9c08f880471183dd661b988f6497)
+    (hatch edge 0.508)
+    (priority 0)
+    (connect_pads (clearance 0.254))
+    (min_thickness 0.254)
+    (filled_polygon
+      (pts
+        (xy 0 0)
+        (xy 60 0)
+        (xy 60 40)
+        (xy 0 40)
+      )
+    )
   )
   (board_setup
     (design_rules
