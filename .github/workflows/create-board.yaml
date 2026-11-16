@@ -89,10 +89,15 @@ jobs:
           cp gerber/* "$BOARD_GERBER_DIR/"
 
           # Copy gerber files to frame - rename to use frame prefix (without suffix)
+          # Use bash string replacement instead of sed for reliability
           for f in gerber/*; do
             basename=$(basename "$f")
             # Replace IN prefix with FRAME_PREFIX for frame files
-            newname=$(echo "$basename" | sed "s/^${IN}/${FRAME_PREFIX}/")
+            if [[ "$basename" == "$IN-"* ]]; then
+              newname="${FRAME_PREFIX}${basename#"$IN-"}"
+            else
+              newname="$basename"
+            fi
             cp "$f" "$BOARD_FRAME_DIR/$newname"
           done
 
