@@ -41,8 +41,8 @@ jobs:
           echo "BOARD_PREFIX=$BOARD_PREFIX" >> $GITHUB_ENV
           echo "BOARD_SUFFIX=$BOARD_SUFFIX" >> $GITHUB_ENV
           echo "IN=${BOARD_PREFIX}${BOARD_SUFFIX}" >> $GITHUB_ENV
-          # Frame prefix is BOARD_PREFIX without trailing hyphen
-          echo "FRAME_PREFIX=${BOARD_PREFIX%%-}" >> $GITHUB_ENV
+          # Frame prefix is explicitly set to knock-processor (without trailing hyphen)
+          echo "FRAME_PREFIX=knock-processor" >> $GITHUB_ENV
 
       - name: Generate Gerber Files
         run: |
@@ -73,7 +73,7 @@ jobs:
       - name: Create boards directory structure
         run: |
           IN=$IN
-          FRAME_PREFIX=$FRAME_PREFIX
+          FRAME_PREFIX=knock-processor
           BOARD_DIR="boards/$IN"
           BOARD_BOARD_DIR="$BOARD_DIR/board"
           BOARD_FRAME_DIR="$BOARD_DIR/frame"
