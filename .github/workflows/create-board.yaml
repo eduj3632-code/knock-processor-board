@@ -85,11 +85,11 @@ jobs:
           # Copy gerber files to board/gerber
           cp gerber/* "$BOARD_GERBER_DIR/"
 
-          # Copy gerber files to frame - rename to use board prefix only (like hellen88bmw)
+          # Copy gerber files to frame - rename to use board prefix only (without suffix)
           for f in gerber/*; do
             basename=$(basename "$f")
-            # Replace IN prefix with BOARD_PREFIX for frame files
-            newname=$(echo "$basename" | sed "s/^${IN}/${BOARD_PREFIX}/")
+            # Replace IN prefix with BOARD_PREFIX without trailing hyphen
+            newname=$(echo "$basename" | sed "s/^${IN}/${BOARD_PREFIX%%-}/")
             cp "$f" "$BOARD_FRAME_DIR/$newname"
           done
 
