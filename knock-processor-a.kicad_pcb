@@ -377,4 +377,5 @@
     )
     (layer_setup (copper_layers 2) (copper_layer_list "F.Cu B.Cu"))
   )
+))
 )
