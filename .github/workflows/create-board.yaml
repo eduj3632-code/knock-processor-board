@@ -85,20 +85,21 @@ jobs:
           mkdir -p "$BOARD_GERBER_DIR"
           mkdir -p "$BOARD_MISC_DIR"
 
+          # Clean up old files in board directory
+          rm -rf "$BOARD_BOARD_DIR"/*
+          rm -rf "$BOARD_FRAME_DIR"/*
+          rm -rf "$BOARD_MISC_DIR"/*
+
           # Copy gerber files to board/gerber
           cp gerber/* "$BOARD_GERBER_DIR/"
 
           # Copy gerber files to frame - rename to use frame prefix (without suffix)
-          # Use bash string replacement to preserve the hyphen after the prefix
-          for f in gerber/*; do
-            basename=$(basename "$f")
-            # Replace IN prefix with FRAME_PREFIX for frame files, preserving the hyphen
-            if [[ "$basename" == "$IN-"* ]]; then
-              newname="${FRAME_PREFIX}-${basename#"$IN-"}"
-            else
-              newname="$basename"
+          # Delete all gerber files first to avoid duplicates
+          find gerber -type f ! -name "*bom*" ! -name "*pos*" -exec basename {} \; | while read fname; do
+            if [[ "$fname" == "$IN-"* ]]; then
+              newname="${FRAME_PREFIX}-${fname#"$IN-"}"
+              cp "gerber/$fname" "$BOARD_FRAME_DIR/$newname"
             fi
-            cp "$f" "$BOARD_FRAME_DIR/$newname"
           done
 
           # Copy BOM to board/misc
@@ -146,6 +147,8 @@ jobs:
           cd - > /dev/null
 
           ls -la "$BOARD_DIR"
+          echo "=== Frame directory ==="
+          ls -la "$BOARD_FRAME_DIR"
 
       - name: Commit and Push All Files
         env:
