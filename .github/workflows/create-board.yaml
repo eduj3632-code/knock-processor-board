@@ -5,76 +5,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-board:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 30
+  call-workflow-passing-data:
+    uses: andreika-git/hellen-one/.github/workflows/create-board.yaml@kicad8
     permissions:
       contents: write
-
-    steps:
-      - name: Checkout with submodules
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Debug workspace
-        run: |
-          echo "=== Workspace contents ==="
-          ls -la
-          echo "=== hellen-one ==="
-          ls -la hellen-one/ 2>/dev/null || echo "NOT FOUND"
-          echo "=== kicad-libraries ==="
-          ls -la kicad-libraries/ 2>/dev/null || echo "NOT FOUND"
-          echo "=== hellen-one/kicad ==="
-          ls -la hellen-one/kicad/ 2>/dev/null || echo "NOT FOUND"
-
-      - name: Install KiCad 8
-        run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-8.0-releases
-          sudo apt-get update
-          sudo apt-get install -y kicad
-
-      - name: Set variables
-        id: vars
-        run: |
-          . revision.txt
-          echo "BOARD_PREFIX=$BOARD_PREFIX" >> $GITHUB_ENV
-          echo "BOARD_SUFFIX=$BOARD_SUFFIX" >> $GITHUB_ENV
-          echo "IN=${BOARD_PREFIX}${BOARD_SUFFIX}" >> $GITHUB_ENV
-
-      - name: Generate Gerber Files
-        run: |
-          IN=$IN
-          OUT_FOLDER=gerber
-          mkdir -p $OUT_FOLDER
-          
-          # Export PDF from schematic
-          kicad-cli sch export pdf "$IN.kicad_sch" --no-background-color -o "$OUT_FOLDER/$IN.pdf"
-          
-          # Export netlist and BOM
-          kicad-cli sch export netlist "$IN.kicad_sch" --format kicadxml -o "$OUT_FOLDER/$IN.net"
-          
-          # Export Gerbers (no zone refill for KiCad 8)
-          kicad-cli pcb export gerbers --disable-aperture-macros -l "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts" --no-x2 "$IN.kicad_pcb" -o $OUT_FOLDER/
-          
-          # Export drill file
-          kicad-cli pcb export drill --map-format ps --excellon-zeros-format suppressleading -u "in" "$IN.kicad_pcb" -o $OUT_FOLDER/
-          
-          # Export positions file
-          kicad-cli pcb export pos --format csv --units mm --bottom-negate-x "$IN.kicad_pcb" -o "$OUT_FOLDER/$IN-all-pos.csv"
-          
-          # Copy BOM
-          cp bom/bom.csv "$OUT_FOLDER/$IN-bom.csv" 2>/dev/null || true
-          
-          ls -la $OUT_FOLDER/
-
-      - name: Commit and Push Gerbers
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git pull --ff-only
-          git add gerber/
-          git diff --cached --quiet || git commit -m "ci: generate fabrication files [skip ci]"
-          git push
+    with:
+      board_prefix: "knock-processor"
+      board_suffix: "a"
+      token: ${{ secrets.GITHUB_TOKEN }}
