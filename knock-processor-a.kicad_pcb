@@ -367,15 +367,5 @@
     )
   )
 
-  (board_setup
-    (design_rules
-      (trace_min 0.1524)
-      (via_dia 0.508)
-      (via_drill 0.254)
-      (trace_clearance 0.2032)
-      (zone_clearance 0.508)
-    )
-    (layer_setup (copper_layers 2) (copper_layer_list "F.Cu B.Cu"))
-  )
 ))
 )
