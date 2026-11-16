@@ -1,6 +1,6 @@
 (kicad_pcb (version 20211123) (generator pcbnew)
   (generator_version "8.0")
-  (uuid 8c65da995aed493f80fad3453b3a298f)
+  (uuid ca802aa4c56549b1bd17429cceea66d1)
   (general
     (thickness 1.6)
   )
@@ -32,17 +32,14 @@
     (allow_soldermask_bridges_in_footprints no)
   )
   (net 0 "")
+  (net 1 "IN_KNOCK1")
+  (net 2 "IN_KNOCK2")
+  (net 3 "OUT_KNOCK1")
+  (net 4 "OUT_KNOCK2")
+  (net 5 "V5A")
+  (net 6 "GND")
   (net_class Default "Default net class")
   (net_class Power "Power nets")
-  (board_setup
-    (design_rules
-      (trace_min 0.1524)
-      (via_dia 0.508)
-      (via_drill 0.254)
-      (trace_clearance 0.2032)
-      (zone_clearance 0.508)
-    )
-  )
   (gr_poly
     (pts
       (xy 0 0)
@@ -52,5 +49,14 @@
     )
     (layer "Edge.Cuts")
     (width 0.15)
+  )
+  (board_setup
+    (design_rules
+      (trace_min 0.1524)
+      (via_dia 0.508)
+      (via_drill 0.254)
+      (trace_clearance 0.2032)
+      (zone_clearance 0.508)
+    )
   )
 )
