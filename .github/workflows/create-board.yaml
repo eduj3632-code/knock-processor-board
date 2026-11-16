@@ -21,12 +21,11 @@ jobs:
         run: |
           echo "=== Workspace contents ==="
           ls -la
+          pwd
           echo "=== hellen-one ==="
           ls -la hellen-one/ 2>/dev/null || echo "NOT FOUND"
           echo "=== kicad-libraries ==="
           ls -la kicad-libraries/ 2>/dev/null || echo "NOT FOUND"
-          echo "=== hellen-one/kicad ==="
-          ls -la hellen-one/kicad/ 2>/dev/null || echo "NOT FOUND"
 
       - name: Install KiCad 8
         run: |
@@ -46,6 +45,7 @@ jobs:
         run: |
           IN=$IN
           OUT_FOLDER=gerber
+          rm -rf $OUT_FOLDER
           mkdir -p $OUT_FOLDER
 
           # Export PDF from schematic
@@ -67,54 +67,54 @@ jobs:
           cp bom/bom.csv "$OUT_FOLDER/$IN-bom.csv" 2>/dev/null || true
 
           ls -la $OUT_FOLDER/
+          echo "Generated gerber files:"
+          ls $OUT_FOLDER/
 
       - name: Create boards directory structure
         run: |
           IN=$IN
-          BOARD_DIR="boards/$IN"
+          BOARD_DIR=$(pwd)/boards/$IN
           BOARD_BOARD_DIR="$BOARD_DIR/board"
           BOARD_FRAME_DIR="$BOARD_DIR/frame"
           BOARD_GERBER_DIR="$BOARD_BOARD_DIR/gerber"
           BOARD_MISC_DIR="$BOARD_BOARD_DIR/misc"
+          GERBER_SRC=$(pwd)/gerber
 
-          mkdir -p "$BOARD_BOARD_DIR"
-          mkdir -p "$BOARD_FRAME_DIR"
-          mkdir -p "$BOARD_GERBER_DIR"
-          mkdir -p "$BOARD_MISC_DIR"
+          echo "Building: $BOARD_DIR"
+          echo "Gerber source: $GERBER_SRC"
 
-          # Clean up old files in board directory
-          rm -rf "$BOARD_BOARD_DIR"/*
-          rm -rf "$BOARD_FRAME_DIR"/*
-          rm -rf "$BOARD_MISC_DIR"/*
+          rm -rf "$BOARD_DIR"
+          mkdir -p "$BOARD_BOARD_DIR" "$BOARD_FRAME_DIR" "$BOARD_GERBER_DIR" "$BOARD_MISC_DIR"
 
+          echo "Copying gerber files..."
           # Copy gerber files to board/gerber
-          cp gerber/* "$BOARD_GERBER_DIR/"
+          cp "$GERBER_SRC"/* "$BOARD_GERBER_DIR/"
 
           # Explicitly copy gerber files to frame with simplified naming
-          # Using explicit file copies instead of dynamic renaming for reliability
-          cp gerber/${IN}-F_Cu.gtl "$BOARD_FRAME_DIR/knock-processor-F_Cu.gtl" 2>/dev/null || true
-          cp gerber/${IN}-B_Cu.gbl "$BOARD_FRAME_DIR/knock-processor-B_Cu.gbl" 2>/dev/null || true
-          cp gerber/${IN}-F_Paste.gtp "$BOARD_FRAME_DIR/knock-processor-F_Paste.gtp" 2>/dev/null || true
-          cp gerber/${IN}-B_Paste.gbp "$BOARD_FRAME_DIR/knock-processor-B_Paste.gbp" 2>/dev/null || true
-          cp gerber/${IN}-F_SilkS.gto "$BOARD_FRAME_DIR/knock-processor-F_SilkS.gto" 2>/dev/null || true
-          cp gerber/${IN}-B_SilkS.gbo "$BOARD_FRAME_DIR/knock-processor-B_SilkS.gbo" 2>/dev/null || true
-          cp gerber/${IN}-F_Mask.gts "$BOARD_FRAME_DIR/knock-processor-F_Mask.gts" 2>/dev/null || true
-          cp gerber/${IN}-B_Mask.gbs "$BOARD_FRAME_DIR/knock-processor-B_Mask.gbs" 2>/dev/null || true
-          cp gerber/${IN}-Edge_Cuts.gm1 "$BOARD_FRAME_DIR/knock-processor-Edge_Cuts.gm1" 2>/dev/null || true
-          cp gerber/${IN}.drl "$BOARD_FRAME_DIR/knock-processor.drl" 2>/dev/null || true
-          cp gerber/${IN}.net "$BOARD_FRAME_DIR/knock-processor.net" 2>/dev/null || true
-          cp gerber/${IN}.pdf "$BOARD_FRAME_DIR/knock-processor.pdf" 2>/dev/null || true
-          cp gerber/${IN}-all-pos.csv "$BOARD_FRAME_DIR/knock-processor-all-pos.csv" 2>/dev/null || true
-          cp gerber/${IN}-bom.csv "$BOARD_FRAME_DIR/knock-processor-bom.csv" 2>/dev/null || true
-          cp gerber/${IN}-job.gbrjob "$BOARD_FRAME_DIR/knock-processor-job.gbrjob" 2>/dev/null || true
+          echo "Copying to frame directory..."
+          for f in "$GERBER_SRC"/*; do
+            fname=$(basename "$f")
+            # Skip BOM and POS files for frame (they go to misc/board)
+            if [[ "$fname" == *"bom"* ]] || [[ "$fname" == *"pos"* ]]; then
+              continue
+            fi
+            # Replace IN prefix with knock-processor
+            if [[ "$fname" == "$IN-"* ]]; then
+              newname="${fname#$IN-}"
+              cp "$f" "$BOARD_FRAME_DIR/knock-processor-$newname"
+            elif [[ "$fname" == "$IN."* ]]; then
+              suffix="${fname#$IN}"
+              cp "$f" "$BOARD_FRAME_DIR/knock-processor$suffix"
+            fi
+          done
 
           # Copy BOM to board/misc
-          cp gerber/${IN}-bom.csv "$BOARD_MISC_DIR/${IN}-BOM.csv" 2>/dev/null || true
+          cp "$GERBER_SRC/${IN}-bom.csv" "$BOARD_MISC_DIR/${IN}-BOM.csv" 2>/dev/null || true
 
           # Copy CPL to board
-          cp gerber/${IN}-all-pos.csv "$BOARD_BOARD_DIR/${IN}-CPL.csv" 2>/dev/null || true
+          cp "$GERBER_SRC/${IN}-all-pos.csv" "$BOARD_BOARD_DIR/${IN}-CPL.csv" 2>/dev/null || true
 
-          # Create board.cfg
+          # Create board.cfg using echo commands
           echo "[${IN}]" > "$BOARD_DIR/board.cfg"
           echo "Prefix = boards/${IN}/board/${IN}" >> "$BOARD_DIR/board.cfg"
           echo "*TopCopper=%(prefix)s.GTL" >> "$BOARD_DIR/board.cfg"
@@ -133,7 +133,7 @@ jobs:
           echo "${IN},0,0,Top,0" > "$BOARD_BOARD_DIR/board_place.txt"
 
           # Copy schematic PDF
-          cp gerber/${IN}.pdf "$BOARD_MISC_DIR/${IN}-schematic.pdf" 2>/dev/null || true
+          cp "$GERBER_SRC/${IN}.pdf" "$BOARD_MISC_DIR/${IN}-schematic.pdf" 2>/dev/null || true
 
           # Generate ibom.html (InteractiveHtmlBom)
           python3 hellen-one/bin/InteractiveHtmlBom/InteractiveHtmlBom/generate_interactive_bom.py \
@@ -152,9 +152,12 @@ jobs:
           zip -r "../${IN}-gerber.zip" gerber/ 2>/dev/null || true
           cd - > /dev/null
 
+          echo "=== Boards directory ==="
           ls -la "$BOARD_DIR"
           echo "=== Frame directory ==="
           ls -la "$BOARD_FRAME_DIR"
+          echo "=== Board directory ==="
+          ls -la "$BOARD_BOARD_DIR"
 
       - name: Commit and Push All Files
         env:
