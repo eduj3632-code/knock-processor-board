@@ -41,8 +41,6 @@ jobs:
           echo "BOARD_PREFIX=$BOARD_PREFIX" >> $GITHUB_ENV
           echo "BOARD_SUFFIX=$BOARD_SUFFIX" >> $GITHUB_ENV
           echo "IN=${BOARD_PREFIX}${BOARD_SUFFIX}" >> $GITHUB_ENV
-          # Frame prefix is explicitly set to knock-processor (without trailing hyphen)
-          echo "FRAME_PREFIX=knock-processor" >> $GITHUB_ENV
 
       - name: Generate Gerber Files
         run: |
@@ -73,7 +71,6 @@ jobs:
       - name: Create boards directory structure
         run: |
           IN=$IN
-          FRAME_PREFIX=knock-processor
           BOARD_DIR="boards/$IN"
           BOARD_BOARD_DIR="$BOARD_DIR/board"
           BOARD_FRAME_DIR="$BOARD_DIR/frame"
@@ -93,14 +90,23 @@ jobs:
           # Copy gerber files to board/gerber
           cp gerber/* "$BOARD_GERBER_DIR/"
 
-          # Copy gerber files to frame - rename to use frame prefix (without suffix)
-          # Delete all gerber files first to avoid duplicates
-          find gerber -type f ! -name "*bom*" ! -name "*pos*" -exec basename {} \; | while read fname; do
-            if [[ "$fname" == "$IN-"* ]]; then
-              newname="${FRAME_PREFIX}-${fname#"$IN-"}"
-              cp "gerber/$fname" "$BOARD_FRAME_DIR/$newname"
-            fi
-          done
+          # Explicitly copy gerber files to frame with simplified naming
+          # Using explicit file copies instead of dynamic renaming for reliability
+          cp gerber/${IN}-F_Cu.gtl "$BOARD_FRAME_DIR/knock-processor-F_Cu.gtl" 2>/dev/null || true
+          cp gerber/${IN}-B_Cu.gbl "$BOARD_FRAME_DIR/knock-processor-B_Cu.gbl" 2>/dev/null || true
+          cp gerber/${IN}-F_Paste.gtp "$BOARD_FRAME_DIR/knock-processor-F_Paste.gtp" 2>/dev/null || true
+          cp gerber/${IN}-B_Paste.gbp "$BOARD_FRAME_DIR/knock-processor-B_Paste.gbp" 2>/dev/null || true
+          cp gerber/${IN}-F_SilkS.gto "$BOARD_FRAME_DIR/knock-processor-F_SilkS.gto" 2>/dev/null || true
+          cp gerber/${IN}-B_SilkS.gbo "$BOARD_FRAME_DIR/knock-processor-B_SilkS.gbo" 2>/dev/null || true
+          cp gerber/${IN}-F_Mask.gts "$BOARD_FRAME_DIR/knock-processor-F_Mask.gts" 2>/dev/null || true
+          cp gerber/${IN}-B_Mask.gbs "$BOARD_FRAME_DIR/knock-processor-B_Mask.gbs" 2>/dev/null || true
+          cp gerber/${IN}-Edge_Cuts.gm1 "$BOARD_FRAME_DIR/knock-processor-Edge_Cuts.gm1" 2>/dev/null || true
+          cp gerber/${IN}.drl "$BOARD_FRAME_DIR/knock-processor.drl" 2>/dev/null || true
+          cp gerber/${IN}.net "$BOARD_FRAME_DIR/knock-processor.net" 2>/dev/null || true
+          cp gerber/${IN}.pdf "$BOARD_FRAME_DIR/knock-processor.pdf" 2>/dev/null || true
+          cp gerber/${IN}-all-pos.csv "$BOARD_FRAME_DIR/knock-processor-all-pos.csv" 2>/dev/null || true
+          cp gerber/${IN}-bom.csv "$BOARD_FRAME_DIR/knock-processor-bom.csv" 2>/dev/null || true
+          cp gerber/${IN}-job.gbrjob "$BOARD_FRAME_DIR/knock-processor-job.gbrjob" 2>/dev/null || true
 
           # Copy BOM to board/misc
           cp gerber/${IN}-bom.csv "$BOARD_MISC_DIR/${IN}-BOM.csv" 2>/dev/null || true
