@@ -85,8 +85,13 @@ jobs:
           # Copy gerber files to board/gerber
           cp gerber/* "$BOARD_GERBER_DIR/"
 
-          # Copy gerber files to frame
-          cp gerber/* "$BOARD_FRAME_DIR/"
+          # Copy gerber files to frame - rename to use board prefix only (like hellen88bmw)
+          for f in gerber/*; do
+            basename=$(basename "$f")
+            # Replace IN prefix with BOARD_PREFIX for frame files
+            newname=$(echo "$basename" | sed "s/^${IN}/${BOARD_PREFIX}/")
+            cp "$f" "$BOARD_FRAME_DIR/$newname"
+          done
 
           # Copy BOM to board/misc
           cp gerber/${IN}-bom.csv "$BOARD_MISC_DIR/${IN}-BOM.csv" 2>/dev/null || true
