@@ -8,6 +8,8 @@ jobs:
   create-board:
     runs-on: ubuntu-22.04
     timeout-minutes: 30
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout with submodules
