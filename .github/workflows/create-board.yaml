@@ -1,0 +1,14 @@
+name: Create Board
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    uses: andreika-git/hellen-one/.github/workflows/create-board.yaml@kicad8
+    permissions:
+      contents: write
+    with:
+      board_prefix: "knock-processor"
+      board_suffix: "a"

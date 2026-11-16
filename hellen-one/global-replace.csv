@@ -1,0 +1,116 @@
+# === RES ===
+#1 Ohm 0402
+#define C25086 C25147
+
+#61.9 0603
+#define C23092 C227998 
+
+#2.7k 0402
+#define C25885 C138017
+
+#6.8k 0402
+#define C25917 C93940
+
+#10k 0402
+#define C25744 C60490
+
+#10k 0603
+#define C25804 C167144
+
+#12.1k 0402
+#define C25852 C102786
+
+#22k 1210
+#define C147142 C230119
+
+#68k 0402
+#define C36871 C137947
+
+#470k 0402
+#define C25790 C137976
+
+# === Inductors ===
+#L421 10uH
+#define C139506 C325966
+
+#L420 2.2 uH
+#define C36828 C295335
+
+# === Capacitors ===
+#22n 1206
+#define C47526 C326702
+
+#33n 0402
+#define C1585 C106862
+
+#1u 1% 0603 Board ID C133
+#define C519560 C519559
+
+# === Fuses ===
+#F410 0.5A 1206
+#define C209741 C369160
+
+# === GDI ===
+#GDI Vboost diode STTH802G-TR -> STTH1602CG-TR
+#define C181034 C2970530 
+
+#GDI 470uF 80V
+#define C443092 C106517 
+
+# === IC ===
+#Ignition high current SN74LXCH8T245PWR 
+#define C7859 C2918963
+
+#CAN protection
+#define C343993 C5261084
+
+#U410 MIC5205-3.3YM5 SOT23-5 MIC5205-3.3YM5-TR C37970
+#define C37970 C129997
+
+#3.3V LDO U101
+#define C435835 C15578
+
+#U107 Baro https://github.com/rusefi/uaefi-Honda-OBD1/issues/14
+#define C94049 C2827824
+
+#U108 U109 Schmidt NXP 74LVC2G17GW,125 -> Diodes 74LVC2G17DW-7
+#define C80500 C151395
+
+#U602 STM32F042K6T6 -> STM32F042K6T7
+#define C69216 C1337340
+
+#U821 TLE9201SG motor driver
+#define C112633 C2653438
+
+# i2c for faster board ID PCF8575TS -> PCA9555APW,118
+#define C12251 C2652295
+
+#U754 MAX9142 substitution - cheaper and more available, it's simpler to be uniform between different boards
+#define C18567 C129325
+
+#U411 TLS115 same power supply/same reference on all boards
+#define C540242 C3743696
+
+#SRV05-4-P-T7
+#define C85364 C6454456
+
+# === LEDs ===
+#Yellow 0603
+#define C72038 C2287
+
+#Green 0603
+#define C72043 C965804
+
+#Blue 0603
+#define C72041 C497940
+
+# === Other === 
+
+#IGBT ISL9V3040D3ST
+#define C462128 C603080
+
+#MM buttons
+#define C115357 C455280
+
+#32.768 crystal Y101
+#define C99009 C97602

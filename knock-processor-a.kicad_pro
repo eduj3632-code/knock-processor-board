@@ -1,0 +1,103 @@
+(kicad_pro (version 8) (generator eeschema)
+  (uuid 741681f27871492e854563100f08ebc8)
+  (board
+    (design_settings
+      (defaults
+        (board_outline_line_width 0.15)
+        (copper_line_width 0.2)
+        (copper_text_thickness 0.3)
+        (copper_text_size 1.5 1.5)
+        (edge_cut_line_width 0.15)
+        (silk_screen_line_width 0.15)
+        (silk_screen_text_thickness 0.3)
+        (silk_screen_text_size 1.5 1.5)
+        (zone_45_degree_only no)
+      )
+      (diff_pair_dimensions)
+      (rule_severities
+        (annulus (min 0 max 0 severity "warning"))
+        (clearance (min 0 max 0 severity "error"))
+        (copper_edge_clearance (min 0 max 0 severity "error"))
+        (courtyards_clearance (min 0 max 0 severity "ignore"))
+        (diff_pair_gap_out_of_range (min 0 max 0 severity "error"))
+        (diff_pair_uncoupled_length_too_long (min 0 max 0 severity "error"))
+        (hole_clearance (min 0 max 0 severity "error"))
+        (hole_near_hole (min 0 max 0 severity "error"))
+        (item_on_copper (min 0 max 0 severity "error"))
+        (length_out_of_range (min 0 max 0 severity "error"))
+        (malformed_courtyard (min 0 max 0 severity "ignore"))
+        (microvia_drill_out_of_range (min 0 max 0 severity "error"))
+        (missing_courtyard (min 0 max 0 severity "ignore"))
+        (net_conflict (min 0 max 0 severity "error"))
+        (padstack (min 0 max 0 severity "error"))
+        (thermal_relief (min 0 max 0 severity "warning"))
+        (too_many_vias (min 0 max 0 severity "error"))
+        (track_width_out_of_range (min 0 max 0 severity "error"))
+        (unconnected_items (min 0 max 0 severity "error"))
+        (zone_has_empty_net (min 0 max 0 severity "warning"))
+        (zones_intersect (min 0 max 0 severity "error"))
+      )
+      (thermal_relief_gap 0.508)
+      (track_widths
+        0.2
+        0.25
+        0.3
+        0.4
+        0.5
+      )
+      (via_sizes
+        0.5
+        0.6
+        0.8
+        1.0
+      )
+      (zone_clearance 0.508)
+    )
+  )
+  (libraries
+    (pinned_footprint_libs)
+    (pinned_symbol_libs)
+  )
+  (net_settings
+    (classes
+      (net_class 0 "Default")
+      (net_class 1 "Power")
+    )
+    (net_colors)
+    (layer_colors)
+    (net_class_assignments)
+  )
+  (schematic
+    (annotate_start_num 0)
+    (label_format "%%R")
+    (drawing
+      (default_line_thickness 6.0)
+      (default_text_size 1.5 1.5)
+      (default_text_thickness 6.0)
+      (inter_sheet_ref_own_page no)
+      (inter_sheet_ref_prefix "")
+      (inter_sheet_ref_suffix "")
+      (inter_sheet_ref_size 1.5 1.5)
+      (junction_size_choice 3)
+      (label_size 1.5 1.5)
+      (pin_symbol_size 1.5 1.5)
+      (text_offset 1.27)
+      (wire_style "dots")
+    )
+    (legacy
+      (lib_symbol_fields)
+      (annotation_filename "")
+      (pdf_file_name "")
+      (pwr_flag_name "#FLG")
+      (remap_symbol_names no)
+      (sheet_name_font_size 1.5)
+      (sheet_number_font_size 1.5)
+    )
+    (page_settings
+      (plot_border_title_block yes)
+      (page_size "A4")
+      (output_directory "")
+      (custom_page_size 210 297)
+    )
+  )
+)
