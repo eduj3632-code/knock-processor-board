@@ -1,4 +1,0 @@
-
-#define libPROTEUS_STIM_QC 73
-#define libHELLEN_4CHAN_STIM_QC 74
-#define libHELLEN_2CHAN_STIM_QC 75

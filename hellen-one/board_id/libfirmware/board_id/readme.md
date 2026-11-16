@@ -1,1 +1,0 @@
-See https://github.com/andreika-git/hellen-one/tree/master/board_id

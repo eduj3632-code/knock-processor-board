@@ -1,8 +1,0 @@
-# distutils build output
-*.pyc
-build/
-dist/
-gerbmerge-*.*/
-MANIFEST
-
-/nbproject/private/
